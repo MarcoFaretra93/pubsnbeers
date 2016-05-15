@@ -1,0 +1,79 @@
+{{#extend "body"}}
+<div class="site-wrapper" xmlns="http://www.w3.org/1999/html">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a href="/">Home</a> </li>
+
+                            {{#unless logged}}
+                            <li class="active"><a href="/login">Login</a></li>
+                            <li class="active"><a href="/register">Register</a>
+                                {{/unless}}
+                                {{#if logged}}
+                                <li class="active"><a href="/logout">Logout</a></li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="inner cover">
+                    <h1 class="cover-heading">Beers List</h1>
+                    <img class="profile-img" src="http://thewanderinghousewife.com/wp-content/uploads/2013/11/beer-2pint-tap-hand-circ-051214.png" alt="">
+                    <p class="lead"></p>
+                    <p class="lead"></p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Degrees</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each result}}
+                            <tr class="beer_entry">
+                                <td>{{this.name}}</td>
+                                <td>{{this.type}}</td>
+                                <td>{{this.alcoholic_degree}}%</td>
+                                <td>
+                                    <a href="/beers/{{this.id}}">
+                                        <button type="button" class="btn btn-danger">Show</button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="/beers/{{this.id}}" method="post">
+                                        <input type="hidden" name="_method" value="delete"></input>
+                                        <button type="submit" class="btn btn-danger">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+
+                    <a href="/beers/create">
+                        <button type="button" class="btn btn-default">Create New</button>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{/extend}}
+
+    {{#extend "stylesheets"}}
+    <link rel='stylesheet' href='/stylesheets/cover.css' />
+    {{/extend}}
+
+    {{#extend "script"}}
+    {{/extend}}

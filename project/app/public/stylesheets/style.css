@@ -1,0 +1,16 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.beer_entry {
+  text-align: left;
+}
+
+.beer_entry:hover {
+  color: #000000;
+}

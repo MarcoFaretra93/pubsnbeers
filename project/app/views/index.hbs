@@ -1,0 +1,54 @@
+{{#extend "body"}}
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a href="/">Home</a> </li>
+                            {{#unless logged}}
+                            <li class="active"><a href="/login">Login</a></li>
+                            <li class="active"><a href="/register">Register</a>
+                            {{/unless}}
+                            {{#if logged}}
+                            <li class="active"><a href="/logout">Logout</a></li>
+                            {{/if}}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="inner cover">
+                <h1 class="cover-heading">Pubs'N'Beers</h1>
+                <img class="profile-img" src="http://thewanderinghousewife.com/wp-content/uploads/2013/11/beer-2pint-tap-hand-circ-051214.png" alt="">
+                <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+                <p class="lead">
+                    <a href="/pubs" class="btn btn-lg btn-default">Pubs</a>
+                    <a href="/beers" class="btn btn-lg btn-default">Beers</a>
+                </p>
+            </div>
+
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{/extend}}
+
+{{#extend "stylesheets"}}
+<link rel='stylesheet' href='/stylesheets/cover.css' />
+{{/extend}}
+
+{{#extend "script"}}
+{{/extend}}

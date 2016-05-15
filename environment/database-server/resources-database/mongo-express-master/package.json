@@ -1,0 +1,72 @@
+{
+  "version": "0.30.51",
+  "author": "https://github.com/mongo-express",
+  "name": "mongo-express",
+  "description": "Web-based admin interface for MongoDB",
+  "keywords": [
+    "admin",
+    "administration",
+    "collection",
+    "database",
+    "GUI",
+    "interface",
+    "manage",
+    "manage-mongo",
+    "mongo",
+    "mongodb",
+    "phpmyadmin",
+    "UI",
+    "web-based"
+  ],
+  "bin": {
+    "mongo-express": "./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mongo-express/mongo-express.git"
+  },
+  "dependencies": {
+    "async": "^2.0.0-rc.3",
+    "basic-auth-connect": "^1.0.0",
+    "body-parser": "^1.14.2",
+    "busboy": "^0.2.13",
+    "cli-color": "^1.1.0",
+    "commander": "^2.9.0",
+    "consolidate": "^0.14.0",
+    "cookie-parser": "1.4.1",
+    "errorhandler": "1.4.3",
+    "express": "4.13.4",
+    "express-session": "1.13.0",
+    "gridfs-stream": "^1.1.1",
+    "method-override": "2.3.5",
+    "mongodb": "^2.1.16",
+    "morgan": "1.7.0",
+    "serve-favicon": "2.3.0",
+    "snyk": "^1.14.1",
+    "swig": "1.4.2",
+    "underscore": "~1.8.0",
+    "update-notifier": "^0.6.3"
+  },
+  "devDependencies": {
+    "chai": "3.5.0",
+    "mocha": "2.4.5",
+    "pre-commit": "^1.1.2"
+  },
+  "engines": {
+    "node": ">=4.0.0",
+    "npm": ">=3.0.0"
+  },
+  "license": "MIT",
+  "scripts": {
+    "jshint": "jshint -c .jshintrc --exclude-path .jshintignore .",
+    "jscs": "jscs .",
+    "start": "node app",
+    "test": "snyk test && ./node_modules/mocha/bin/mocha"
+  },
+  "pre-commit": [
+    "jshint",
+    "jscs",
+    "test"
+  ],
+  "main": "./middleware"
+}

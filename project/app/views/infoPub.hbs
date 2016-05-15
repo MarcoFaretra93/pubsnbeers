@@ -1,0 +1,82 @@
+{{#extend "body"}}
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <nav>
+                        <ul class="nav masthead-nav">
+                            <li class="active"><a href="/">Home</a> </li>
+
+                            {{#unless logged}}
+                            <li class="active"><a href="/login">Login</a></li>
+                            <li class="active"><a href="/register">Register</a>
+                                {{/unless}}
+                                {{#if logged}}
+                                <li class="active"><a href="/logout">Logout</a></li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="inner cover">
+                    <h1 class="cover-heading">{{name}}</h1>
+                    <img class="profile-img" src="http://thewanderinghousewife.com/wp-content/uploads/2013/11/beer-2pint-tap-hand-circ-051214.png" alt="">
+                    <p class="lead"></p>
+                    <p class="lead"></p>
+                    
+                    {{#if name}}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+
+                                <th>Location</th>
+                                <th>Menu</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr class="beer_entry">
+
+                                <td>{{location}}</td>
+                                <td>
+                                    <a href="/pubs/{{id}}/beers">
+                                        <button type="button" class="btn btn-primary">Show Menu</button>
+                                    </a>
+                                </td>
+                                <td>
+
+                                    <td>
+                                        <form action="/pubs/{{id}}" method="post">
+                                            <a class="btn btn-danger" href="/pubs/{{id}}/edit">Edit</a>
+                                            <input type="hidden" name="_method" value="delete">
+                                            <button class="btn btn-danger" type="submit" name="button">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {{/if}}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{/extend}}
+
+        {{#extend "stylesheets"}}
+        <link rel='stylesheet' href='/stylesheets/cover.css' />
+        {{/extend}}
+
+        {{#extend "script"}}
+        {{/extend}}
