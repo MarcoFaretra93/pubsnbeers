@@ -31,6 +31,7 @@ La macchina virtuale **database** (10.11.1.7) è pensata per l'esecuzione del co
 * Ubuntu Trusty (14.04 LTS) a 64 bit 
 * Node.js
 * MongoDB
+* Git
 
 Inoltre la macchina **database** ha il seguente tool di supporto per la gestione di MongoDB:
 
