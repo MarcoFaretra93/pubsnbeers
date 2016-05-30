@@ -53,17 +53,8 @@ module.exports = {
         });
     },
 
-    /*removeAllEntriesByBeer: function(beer_id, cb) {
-        entryMenuModel.find({beer: beer_id}).remove().exec(function(err, result) {
-        cb();
-        });
-    },*/
-
     removeBeerEntries: function (id, cb) {
         entryMenuModel.find({beer: id}, function (err, entries) {
-            //this.removeAllEntriesByBeer(id, function(){
-             //   cb(entries);
-            //});
             entryMenuModel.find({beer: id}).remove().exec(function(err, result) {
                 cb(err, entries);
             });

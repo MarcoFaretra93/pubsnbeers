@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var connection = require('./configs/dbConnection').connection;
+// var connection = require('./configs/dbConnection').connection;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -16,13 +16,11 @@ var pubs = require('./routes/pubs');
 var beers = require('./routes/beers');
 var authMiddleware = require('./routes/middlewares/isUserAuthenticated');
 var loggedMiddleware = require('./routes/middlewares/isUserAlreadyLogged');
+var restMiddleware = require('./routes/middlewares/restMiddleware');
 
 
 
 var app = express();
-
-// linkin connection to app
-app.set('connection', connection);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,19 +32,24 @@ handlebars = extend(handlebars);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 if (process.env.NODE_ENV !== 'test') {
+    var connection = require('./configs/dbConnection').connection;
+    // linkin connection to app
+    app.set('connection', connection);
     app.use(logger('dev'));
 }
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('express-method-override')('_method'));
 app.use(cookieParser());
-// app.use(method_override);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/logout', logout);
 app.use('/login', loggedMiddleware, login);
 app.use('/register', loggedMiddleware, register);
 //TODO middlewares da rimettere
+app.use('/api/beers', restMiddleware, beers);
+app.use('/api/pubs', restMiddleware, pubs);
 app.use('/beers', beers);
 app.use('/pubs', pubs);
 app.use('/', routes);

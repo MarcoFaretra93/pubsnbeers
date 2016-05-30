@@ -7,10 +7,15 @@ var menuRepo = require('../repositories/menuRepo');
 //Show all beers
 router.get('/', function(req, res) {
     beerRepo.findAll(function(err, beers){
-        res.render('beers', {
-            result : beers,
-            logged: req.cookies.PNB_token ? true : false
-        });
+        if(req.api) {
+            res.status(200);
+            res.send(beers);
+        } else {
+            res.render('beers', {
+                result : beers,
+                logged: req.cookies.PNB_token ? true : false
+            });
+        }
     });
 });
 
@@ -19,13 +24,28 @@ router.post('/', function(req, res) {
         if(isNew) {
             beerRepo.persist(req.body.name, req.body.type, req.body.alcoholic_degree, function(err, newBeer) {
                 if (err) {
-                    res.redirect('/beers/create?error=beer%20not%20inserted');
+                    if (req.api) {
+                        res.status(500);
+                        res.send({message: 'beer not inserted'});
+                    } else {
+                        res.redirect('/beers/create?error=beer%20not%20inserted');
+                    }
                 } else {
-                    res.redirect('/beers/create?message=beer%20inserted%20correctly');
+                    if(req.api){
+                        res.status(201);
+                        res.send(newBeer._doc);
+                    } else {
+                        res.redirect('/beers/create?message=beer%20inserted%20correctly');
+                    }
                 }
             });
         } else {
-            res.redirect('/beers/create?error=beer%20already%20inserted');
+            if (req.api) {
+                res.status(409);
+                res.send({message: 'beer already inserted'});
+            } else {
+                res.redirect('/beers/create?error=beer%20already%20inserted');
+            }
         }
     });
 });
@@ -39,19 +59,39 @@ router.get('/create', function(req, res) {
 
 router.get('/:id', function(req, res) {
     beerRepo.findBeerById(req.params.id, function (err, beer) {
-        if(err){
-            res.render('error',err);
-        }else {
-            res.render('infoBeer',beer);
+        if(err || beer === null){
+            if (req.api) {
+                res.status(404);
+                res.send({message: 'beer not found'});
+            } else {
+                res.render('error', err);
+            }
+        } else {
+            if (req.api) {
+                res.status(200);
+                res.send(beer._doc);
+            } else {
+                res.render('infoBeer', beer);
+            }
         }
     });
 });
 
 router.delete('/:id', function(req, res) {
-    beerRepo.removeBeer(req.params.id, function () {
+    beerRepo.removeBeer(req.params.id, function (err, beer) {
         entryMenuRepo.removeBeerEntries(req.params.id, function(err, entries){
             menuRepo.removeEntriesFromMenus(entries);
-            res.redirect('/beers');
+            if (req.api) {
+                if (beer) {
+                    res.status(200);
+                    res.send(beer);
+                } else {
+                    res.status(404);
+                    res.send({message: 'beer not found'});
+                }
+            } else {
+                res.redirect('/beers');
+            }
         });
     });
 });
@@ -60,10 +100,20 @@ router.put('/:id', function(req, res) {
     beerRepo.isNewBeer(req.body.name, req.body.type, req.body.alcoholic_degree, function(isNew) {
         if(isNew) {
             beerRepo.updateBeer(req.params.id, req.body.name, req.body.type, req.body.alcoholic_degree, function (err, beer) {
-                res.redirect('/beers/' + req.params.id + '/edit?message=beer%20updated');
+                if (req.api) {
+                    res.status(200);
+                    res.send(beer._doc);
+                } else {
+                    res.redirect('/beers/' + req.params.id + '/edit?message=beer%20updated');
+                }
             });
         } else {
-            res.redirect('/beers/' + req.params.id + '/edit?error=beer%20already%20exist');
+            if (req.api) {
+                res.status(409);
+                res.send({message: 'beer already exists'})
+            } else {
+                res.redirect('/beers/' + req.params.id + '/edit?error=beer%20already%20exists');
+            }
         }
     });
 });

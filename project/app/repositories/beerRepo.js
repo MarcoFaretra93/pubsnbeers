@@ -32,7 +32,7 @@ module.exports = {
     },
 
     updateBeer: function(id, name, type, degree, cb) {
-        beerModel.findByIdAndUpdate(id, {$set: {name: name, type: type, alcoholic_degree: degree}}, function(err, beer) {
+        beerModel.findByIdAndUpdate(id, {$set: {name: name, type: type, alcoholic_degree: degree}}, {new: true }, function(err, beer) {
             cb(err, beer);
         });
     },
@@ -54,8 +54,8 @@ module.exports = {
     },
 
     removeBeer: function (id, cb) {
-        beerModel.findByIdAndRemove(id, function (err) {
-            cb();
+        beerModel.findByIdAndRemove(id, function (err, beer) {
+            cb(err, beer);
         });
     }
 }

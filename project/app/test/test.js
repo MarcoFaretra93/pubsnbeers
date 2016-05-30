@@ -12,9 +12,9 @@ var serverToken = require('../configs/JWT');
 var url = ('http://10.11.1.5:8001');
 var http = require('http');
 var app = require('../app');
-app.settings.connection.close(function(){
+// app.settings.connection.close(function(){
     require('../configs/dbTestConnection');
-});
+// });
 var jwt = require('jsonwebtoken');
 var jwtConfig = require('../configs/JWT');
 var testBeer = {name: 'test', type: 'test', alcoholic_degree: '1'};
@@ -178,10 +178,10 @@ describe('Test beers', function () {
                 beerModel.findById(beer._id, function (err, beer) {
                     should(beer).not.be.ok();
                     res.header.should.have.property('location', '/beers');
+                    done();
                 });
             });
         });
-        done();
     });
 
 
@@ -461,6 +461,146 @@ describe('Test pubs', function () {
                     pubModel.findByIdAndRemove(pub._id, function (err, result) {
                         done();
                     });
+                });
+            });
+        });
+    });
+});
+
+
+
+/*
+*-------------------------------Test Rest----------------------------
+*/
+describe('Test funzionalità REST', function() {
+
+
+    it('Creazione di una birra', function (done) {
+        request(url).post('/api/beers').send({name: 'new_beer', type: 'test_beer', alcoholic_degree: '5'})
+        .end(function (err, res) {
+            res.should.have.property('status', 201);
+            res.body.should.have.property('name', 'new_beer');
+            res.body.should.have.property('type', 'test_beer');
+            res.body.should.have.property('alcoholic_degree', 5);
+            beerModel.remove({name: 'new_beer'}, function (err) {
+                done();
+            });
+        });
+    });
+
+
+    it('Creazione di una birra già inserita', function (done) {
+        beerModel.create({name: 'new_beer', type: 'test_beer', alcoholic_degree: '5'}, function (err, beer) {
+            request(url).post('/api/beers').send({name: 'new_beer', type: 'test_beer', alcoholic_degree: '5'})
+            .end(function (err, res) {
+                res.should.have.property('status', 409);
+                res.body.should.have.property('message');
+                beerModel.remove({name: 'new_beer'}, function (err) {
+                    done();
+                });
+            });
+        });
+    });
+
+
+    it('Ricezione di tutte le birre', function (done) {
+        beerModel.create(testBeer, function (err, beer1) {
+            beerModel.create(testBeer2, function (err, beer2) {
+                request(url).get('/api/beers').end(function (err, res) {
+                    res.body.should.be.ok();
+                    res.should.have.property('status', 200);
+                    beerModel.findByIdAndRemove(beer1._id, function (err, result){});
+                    beerModel.findByIdAndRemove(beer2._id, function (err, result){});
+                    done();
+                });
+            });
+        });
+    });
+
+
+    it('Ricezione di una birra', function (done) {
+        beerModel.create(testBeer, function (err, beer1) {
+            request(url).get('/api/beers/' + beer1._id).end(function (err, res) {
+                res.body.should.have.property('name', beer1.name);
+                res.body.should.have.property('type', beer1.type);
+                res.should.have.property('status', 200);
+                beerModel.findByIdAndRemove(beer1._id, function (err, result){});
+                done();
+            });
+        });
+    });
+
+    it('Ricezione errata di una birra', function (done) {
+        beerModel.create(testBeer, function (err, beer1) {
+            request(url).get('/api/beers/' + '0000').end(function (err, res) {
+                res.body.should.not.have.property('name', beer1.name);
+                res.body.should.not.have.property('type', beer1.type);
+                res.should.have.property('status', 404);
+                beerModel.findByIdAndRemove(beer1._id, function (err, result){});
+                done();
+            });
+        });
+    });
+
+    it('Modifica corretta di una birra', function (done) {
+        beerModel.create(testBeer, function (err, beer) {
+            var mod = {
+                name: 'modname',
+                type: 'modtype',
+                alcoholic_degree: 50
+            };
+            request(url).put('/api/beers/' + beer._id).send(mod).end(function (err, res) {
+                res.should.have.property('status', 200);
+                res.body.should.have.property('name', 'modname');
+                res.body.should.have.property('type', 'modtype');
+                res.body.should.have.property('alcoholic_degree', 50);
+                beerModel.findByIdAndRemove(beer._id, function (err, result) {
+                    done();
+                });
+            });
+        });
+    });
+
+    it('Modifica errata di una birra', function (done) {
+        beerModel.create(testBeer, function (err, beer) {
+            var mod = {
+                name: 'test',
+                type: 'test',
+                alcoholic_degree: 1
+            };
+            request(url).put('/api/beers/' + beer._id).send(mod).end(function (err, res) {
+                res.should.have.property('status', 409);
+                res.body.should.have.property('message');
+                beerModel.findByIdAndRemove(beer._id, function (err, result) {
+                    done();
+                });
+            });
+        });
+    });
+
+    it('Rimozione corretta di una birra', function (done) {
+        beerModel.create(testBeer, function (err, beer) {
+            request(url).delete('/api/beers/' + beer._id).end(function (err, res) {
+                res.should.have.property('status', 200);
+                res.body.should.have.property('name', testBeer.name);
+                res.body.should.have.property('type', testBeer.type);
+                res.body.should.have.property('alcoholic_degree', +testBeer.alcoholic_degree); //il più per convertire il grado alcolico in numero
+                beerModel.findById(beer._id, function (err, beer) {
+                    should(beer).not.be.ok();
+                    done();
+                });
+            });
+        });
+    });
+
+    it('Rimozione errata di una birra, birra non trovata', function (done) {
+        beerModel.create(testBeer, function (err, beer) {
+            request(url).delete('/api/beers/' + '000').end(function (err, res) {
+                res.should.have.property('status', 404);
+                res.body.should.have.property('message');
+                beerModel.findById(beer._id, function (err, beer) {
+                    should(beer).be.ok();
+                    done();
                 });
             });
         });
