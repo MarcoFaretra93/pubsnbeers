@@ -1,0 +1,96 @@
+gio 2 giu 2016, 16.15.49, CEST
+Creazione di 3 birre, di cui l'ultima è ripetuta
+3 POST /api/beers response:
+{
+  "_id": "57503f950f4194fb0cb79812",
+  "alcoholic_degree": 1,
+  "type": "type1",
+  "name": "beer1",
+  "__v": 0
+}
+{
+  "_id": "57503f950f4194fb0cb79813",
+  "alcoholic_degree": 2,
+  "type": "type2",
+  "name": "beer2",
+  "__v": 0
+}
+{
+  "message": "beer already inserted"
+}
+
+ 
+
+Ricezione di tutte le birre
+1 GET /api/beers response:
+[
+  {
+    "_id": "57503f950f4194fb0cb79812",
+    "name": "beer1",
+    "type": "type1",
+    "alcoholic_degree": 1,
+    "__v": 0
+  },
+  {
+    "_id": "57503f950f4194fb0cb79813",
+    "name": "beer2",
+    "type": "type2",
+    "alcoholic_degree": 2,
+    "__v": 0
+  }
+]
+
+ 
+
+Ricezione di una birra
+1 GET /api/beers/57503f950f4194fb0cb79812 response
+{
+  "__v": 0,
+  "alcoholic_degree": 1,
+  "type": "type1",
+  "name": "beer1",
+  "_id": "57503f950f4194fb0cb79812"
+}
+
+ 
+
+Modifica di una birra
+1 PUT /api/beers/57503f950f4194fb0cb79812 response:
+{
+  "__v": 0,
+  "alcoholic_degree": 100,
+  "type": "mod",
+  "name": "mod",
+  "_id": "57503f950f4194fb0cb79812"
+}
+
+ 
+
+Modifica di una birra
+1 PUT /api/beers/000 response:
+{
+  "message": "beer already exists or not found"
+}
+
+ 
+
+Cancellazione di una birra
+1 DELETE /api/beers/57503f950f4194fb0cb79812 response:
+{
+  "_id": "57503f950f4194fb0cb79812",
+  "name": "mod",
+  "type": "mod",
+  "alcoholic_degree": 100,
+  "__v": 0
+}
+
+ 
+
+Cancellazione di una birra non esistente
+1 DELETE /api/beers/57503f950f4194fb0cb79812 response:
+{
+  "message": "beer not found"
+}
+
+ 
+

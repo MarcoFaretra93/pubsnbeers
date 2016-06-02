@@ -224,6 +224,27 @@ describe('Test beers', function () {
         });
     });
 
+    it('Modifica fallita di una birra, birra non esistente', function (done) {
+        beerModel.create(testBeer, function (err, beer) {
+            var mod = {
+                name: 'modname',
+                type: 'modtype',
+                alcoholic_degree: 50
+            };
+            request(url).put('/beers/000').send(mod).end(function (err, res) {
+                beerModel.findById(beer._id, function (err, beer) {
+                    should(beer).be.ok();
+                    beer.should.have.property('name', 'test');
+                    beer.should.have.property('type', 'test');
+                    beer.should.have.property('alcoholic_degree', 1);
+                    beerModel.findByIdAndRemove(beer._id, function (err, result) {
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
 
     it('Modifica fallita di una birra, birra già esistente', function (done) {
         beerModel.create(testBeer, function (err, beer1) {
@@ -600,6 +621,8 @@ describe('Test funzionalità REST', function() {
                 res.body.should.have.property('message');
                 beerModel.findById(beer._id, function (err, beer) {
                     should(beer).be.ok();
+                });
+                beerModel.findByIdAndRemove(beer._id, function (err, result) {
                     done();
                 });
             });

@@ -32,6 +32,7 @@ Questo repository contiene il codice relativo sia all'ambiente di esecuzione del
 Questo repository è organizzato in diverse sezioni (cartelle):
 * [project](project/) contiene il codice dell' *applicazione distribuita*;
 * [environment](environment/) contiene il codice per la gestione dell' *ambiente distribuito*.
+* [curl-client](curl-client/) contiene gli script dei client per eseguire richieste mediante *curl*
 
 ## Accesso al repository
 

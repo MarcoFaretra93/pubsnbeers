@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
 var beerSchema = new mongoose.Schema({
-    name: String,
-    type: String,
-    alcoholic_degree: Number
+    name: {type: String, required: true},
+    type: {type: String, required: true},
+    alcoholic_degree: {type: Number, required: true}
 });
 
 var beer = mongoose.model('Beer', beerSchema);

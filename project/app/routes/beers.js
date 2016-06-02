@@ -110,7 +110,7 @@ router.put('/:id', function(req, res) {
         } else {
             if (req.api) {
                 res.status(409);
-                res.send({message: 'beer already exists'})
+                res.send({message: 'beer already exists or not found'})
             } else {
                 res.redirect('/beers/' + req.params.id + '/edit?error=beer%20already%20exists');
             }
