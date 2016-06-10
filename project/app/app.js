@@ -5,8 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// var connection = require('./configs/dbConnection').connection;
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
@@ -16,9 +14,6 @@ var pubs = require('./routes/pubs');
 var beers = require('./routes/beers');
 var authMiddleware = require('./routes/middlewares/isUserAuthenticated');
 var loggedMiddleware = require('./routes/middlewares/isUserAlreadyLogged');
-var restMiddleware = require('./routes/middlewares/restMiddleware');
-
-
 
 var app = express();
 
@@ -47,9 +42,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/logout', logout);
 app.use('/login', loggedMiddleware, login);
 app.use('/register', loggedMiddleware, register);
-//TODO middlewares da rimettere
-app.use('/api/beers', restMiddleware, beers);
-app.use('/api/pubs', restMiddleware, pubs);
 app.use('/beers', beers);
 app.use('/pubs', pubs);
 app.use('/', routes);

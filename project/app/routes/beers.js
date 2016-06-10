@@ -7,7 +7,7 @@ var menuRepo = require('../repositories/menuRepo');
 //Show all beers
 router.get('/', function(req, res) {
     beerRepo.findAll(function(err, beers){
-        if(req.api) {
+        if(req.headers.accept.toLowerCase() === "text/json") {
             res.status(200);
             res.send(beers);
         } else {
@@ -24,14 +24,14 @@ router.post('/', function(req, res) {
         if(isNew) {
             beerRepo.persist(req.body.name, req.body.type, req.body.alcoholic_degree, function(err, newBeer) {
                 if (err) {
-                    if (req.api) {
+                    if (req.headers.accept.toLowerCase() === "text/json") {
                         res.status(500);
                         res.send({message: 'beer not inserted'});
                     } else {
                         res.redirect('/beers/create?error=beer%20not%20inserted');
                     }
                 } else {
-                    if(req.api){
+                    if(req.headers.accept.toLowerCase() === "text/json"){
                         res.status(201);
                         res.send(newBeer._doc);
                     } else {
@@ -40,7 +40,7 @@ router.post('/', function(req, res) {
                 }
             });
         } else {
-            if (req.api) {
+            if (req.headers.accept.toLowerCase() === "text/json") {
                 res.status(409);
                 res.send({message: 'beer already inserted'});
             } else {
@@ -60,14 +60,14 @@ router.get('/create', function(req, res) {
 router.get('/:id', function(req, res) {
     beerRepo.findBeerById(req.params.id, function (err, beer) {
         if(err || beer === null){
-            if (req.api) {
+            if (req.headers.accept.toLowerCase() === "text/json") {
                 res.status(404);
                 res.send({message: 'beer not found'});
             } else {
                 res.render('error', err);
             }
         } else {
-            if (req.api) {
+            if (req.headers.accept.toLowerCase() === "text/json") {
                 res.status(200);
                 res.send(beer._doc);
             } else {
@@ -81,7 +81,7 @@ router.delete('/:id', function(req, res) {
     beerRepo.removeBeer(req.params.id, function (err, beer) {
         entryMenuRepo.removeBeerEntries(req.params.id, function(err, entries){
             menuRepo.removeEntriesFromMenus(entries);
-            if (req.api) {
+            if (req.headers.accept.toLowerCase() === "text/json") {
                 if (beer) {
                     res.status(200);
                     res.send(beer);
@@ -100,7 +100,7 @@ router.put('/:id', function(req, res) {
     beerRepo.isNewBeer(req.body.name, req.body.type, req.body.alcoholic_degree, function(isNew) {
         if(isNew) {
             beerRepo.updateBeer(req.params.id, req.body.name, req.body.type, req.body.alcoholic_degree, function (err, beer) {
-                if (req.api) {
+                if (req.headers.accept.toLowerCase() === "text/json") {
                     res.status(200);
                     res.send(beer._doc);
                 } else {
@@ -108,7 +108,7 @@ router.put('/:id', function(req, res) {
                 }
             });
         } else {
-            if (req.api) {
+            if (req.headers.accept.toLowerCase() === "text/json") {
                 res.status(409);
                 res.send({message: 'beer already exists or not found'})
             } else {
