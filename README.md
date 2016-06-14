@@ -21,11 +21,17 @@ Questo repository contiene il codice relativo sia all'ambiente di esecuzione del
 * [Git](https://git-scm.com/)
 
 ### Per la gestione dell'ambiente di esecuzione  
+Si possono usare due configurazioni per la gestione dell'ambiente.
+
+Prima configurazione:
 * [VirtualBox](https://www.virtualbox.org/)
 * [Vagrant](https://www.vagrantup.com/)
 * [Git](https://git-scm.com/)
 * Un browser web come [Chrome](https://www.google.com/chrome/)
 * Una shell come [Git](https://git-scm.com/)
+
+Seconda configurazione:
+* [Docker](https://www.docker.com/)
 
 ## Organizzazione del repository
 
