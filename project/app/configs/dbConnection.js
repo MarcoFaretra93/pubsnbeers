@@ -5,7 +5,7 @@ var mongoose = require( 'mongoose' );
 var database = require('./dbConfig');
 
 // Build the connection string
-var dbURI = 'mongodb://'+ database.host + ':' + database.port + '/' + database.db;
+var dbURI = 'mongodb://db:' + database.port + '/' + database.db;
 
 // Create the database connection
 mongoose.connect(dbURI);
